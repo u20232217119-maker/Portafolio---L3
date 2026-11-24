@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portafolio de Electrónica 3 — Control Temporizado de Energía y Fabricación PCBA</title>
+  <style>
+    :root {
+      --bg: #f7f5fb;
+      --surface: #ffffff;
+      --ink: #241838;
+      --muted: #5d5075;
+      --primary: #7e3af2;
+      --primary-deep: #5b21b6;
+      --primary-soft: #efe9fc;
+      --border: #e3daf5;
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.65;
+    }
+
+    .container {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Barra superior */
+    .topbar {
+      background: #6d28d9;
+      color: #f5f3ff;
+      font-size: 0.88rem;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .topbar-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .topbar-brand {
+      font-weight: 600;
+    }
+
+    .topbar-nav {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .topbar-nav a {
+      color: #ede9fe;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .topbar-nav a:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    /* Portada morado / violeta luminoso */
+    .hero {
+      background:
+        radial-gradient(circle at top right, rgba(216, 180, 254, 0.45), transparent 48%),
+        linear-gradient(135deg, #7e22ce 0%, #8b5cf6 52%, #a855f7 100%);
+      color: #ffffff;
+      padding: 64px 0 68px;
+      border-bottom-left-radius: 28px;
+      border-bottom-right-radius: 28px;
+    }
+
+    .hero-frame {
+      border: 2px solid rgba(255, 255, 255, 0.78);
+      border-radius: 16px;
+      padding: 36px 28px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(4px);
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.9rem, 3.8vw, 2.75rem);
+      font-style: italic;
+      line-height: 1.2;
+      margin-bottom: 14px;
+      font-weight: 700;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+      font-style: italic;
+      font-weight: 500;
+      color: #faf5ff;
+      line-height: 1.45;
+      margin-bottom: 24px;
+    }
+
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-size: 0.95rem;
+      transition: transform 0.15s ease, opacity 0.15s ease, background-color 0.15s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      opacity: 0.96;
+    }
+
+    .btn-light {
+      background: #ffffff;
+      color: var(--primary-deep);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-deep);
+    }
+
+    section {
+      padding: 56px 0;
+    }
+
+    .section-title {
+      font-size: 1.75rem;
+      font-style: italic;
+      color: var(--primary-deep);
+      margin-bottom: 6px;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    /* Sobre mí */
+    .about-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      display: grid;
+      grid-template-columns: 230px 1fr;
+      gap: 28px;
+      align-items: center;
+      box-shadow: 0 10px 28px rgba(109, 40, 217, 0.06);
+    }
+
+    .photo-frame {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 12px;
+      background: var(--primary-soft);
+      color: var(--primary-deep);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 12px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      overflow: hidden;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .about-heading {
+      font-size: 1.65rem;
+      font-style: italic;
+      color: var(--primary-deep);
+      margin-bottom: 12px;
+    }
+
+    .about-text {
+      color: var(--ink);
+      font-size: 0.98rem;
+      text-align: justify;
+    }
+
+    .about-note {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: var(--primary-soft);
+      color: var(--primary-deep);
+      font-size: 0.92rem;
+    }
+
+    /* Equipo */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .member-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      text-align: center;
+      box-shadow: 0 8px 22px rgba(109, 40, 217, 0.05);
+    }
+
+    .member-avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      margin: 0 auto 14px;
+      background: var(--primary-soft);
+      color: var(--primary-deep);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      overflow: hidden;
+      border: 2px solid #d8b4fe;
+    }
+
+    .member-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .member-card h3 {
+      font-size: 1.08rem;
+      color: var(--ink);
+    }
+
+    .member-role {
+      margin-top: 6px;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    .member-code {
+      display: inline-block;
+      margin-top: 8px;
+      background: var(--primary-soft);
+      color: var(--primary-deep);
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 3px 12px;
+      border-radius: 999px;
+    }
+
+    /* Proyectos */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      cursor: pointer;
+      transition: border-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+      box-shadow: 0 8px 22px rgba(109, 40, 217, 0.05);
+    }
+
+    .project-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(126, 58, 242, 0.12);
+    }
+
+    .project-badge {
+      display: block;
+      color: var(--primary);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .project-card h3 {
+      font-size: 1.18rem;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+
+    .project-card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    /* Ventana modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(36, 24, 56, 0.62);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 50;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--surface);
+      border-radius: 20px;
+      max-width: 680px;
+      width: 100%;
+      padding: 28px;
+      position: relative;
+      max-height: 88vh;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      box-shadow: 0 24px 50px rgba(36, 24, 56, 0.28);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: none;
+      background: var(--primary-soft);
+      color: var(--primary-deep);
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .modal-content h3 {
+      font-size: 1.38rem;
+      margin-bottom: 14px;
+      padding-right: 36px;
+      color: var(--primary-deep);
+    }
+
+    .modal-section {
+      margin-bottom: 14px;
+    }
+
+    .modal-section h4 {
+      font-size: 0.92rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .modal-section p {
+      color: var(--ink);
+      font-size: 0.96rem;
+    }
+
+    .modal-actions {
+      margin-top: 20px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 32px 0 46px;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 720px) {
+      .about-box {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .about-text {
+        text-align: left;
+      }
+      .photo-frame {
+        max-width: 240px;
+        margin: 0 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra superior -->
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <span class="topbar-brand">Portafolio ~ Isabela Muñoz</span>
+      <nav class="topbar-nav" aria-label="Navegación principal">
+        <a href="#sobre-mi">Sobre Mí</a>
+        <a href="#equipo">Equipo</a>
+        <a href="#proyectos">Proyectos</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- 1. PORTADA -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-frame">
+        <h1>Portafolio de Electrónica 3</h1>
+        <p class="hero-subtitle">Control Temporizado de Energía y<br />Fabricación PCBA</p>
+        <a href="#proyectos" class="btn btn-light">Explorar proyectos</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- 2. SOBRE MÍ -->
+    <section id="sobre-mi">
+      <div class="container">
+        <div class="about-box">
+          <div class="photo-frame">
+            <img src="assets/img/isabela.jpg" alt="Isabela Muñoz" onerror="this.style.display='none'; this.parentNode.textContent='Sube tu foto en assets/img/isabela.jpg';" />
+          </div>
+          <div>
+            <h2 class="about-heading">Sobre Mí</h2>
+            <p class="about-text">
+              Soy Isabela Muñoz, estudiante de Ingeniería Electrónica en la Universidad Surcolombiana. A lo largo de Electrónica 3 participé de forma transversal en el proyecto: aporté la idea inicial, apoyé en la esquematización, operé la fresadora CNC, realicé soldadura y acompañé los ajustes y la documentación del proceso. Esa experiencia de punta a punta me permitió conectar el diseño con la fabricación real, las pruebas y la transición hacia fabricación y ensamblaje industrial (PCBA).
+            </p>
+            <div class="about-note">
+              <strong>Lo que más me dejó:</strong> Aprender a diagnosticar cuando algo no sale a la primera, revisar qué se puede mejorar y ajustar el diseño con calma en cada etapa.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. EQUIPO -->
+    <section id="equipo">
+      <div class="container">
+        <h2 class="section-title">Equipo</h2>
+        <p class="section-sub">Trabajo colaborativo en experimentación, diseño de PCB y documentación.</p>
+        <div class="team-grid">
+          <article class="member-card">
+            <div class="member-avatar">
+              <img src="assets/img/isabela.jpg" alt="Isabela Muñoz Alvarez" onerror="this.style.display='none'; this.parentNode.textContent='Isabela';" />
+            </div>
+            <h3>Isabela Muñoz Alvarez</h3>
+            <p class="member-role">Idea inicial, esquematización, fresadora CNC, soldadura y documentación.</p>
+            <span class="member-code">Código: 20232217119</span>
+          </article>
+
+          <article class="member-card">
+            <div class="member-avatar">
+              <img src="assets/img/natalia.jpg" alt="Natalia Ardila Valderrama" onerror="this.style.display='none'; this.parentNode.textContent='Natalia';" />
+            </div>
+            <h3>Natalia Ardila Valderrama</h3>
+            <p class="member-role">Experimentación, mediciones, diseño en CAD/PCB y registro técnico.</p>
+            <span class="member-code">Código: 20232216940</span>
+          </article>
+
+          <article class="member-card">
+            <div class="member-avatar">
+              <img src="assets/img/cesar.jpg" alt="César Luis Rivera" onerror="this.style.display='none'; this.parentNode.textContent='César';" />
+            </div>
+            <h3>César Luis Rivera</h3>
+            <p class="member-role">Análisis de circuitos, pruebas en laboratorio, integración y documentación.</p>
+            <span class="member-code">Código: 20201185913</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PROYECTOS -->
+    <section id="proyectos">
+      <div class="container">
+        <h2 class="section-title">Proyectos</h2>
+        <p class="section-sub">Haz clic en cada bloque para ver objetivo, proceso, errores resueltos, resultados y archivo.</p>
+
+        <div class="projects-grid">
+          <article class="project-card" onclick="abrirModal('p1')">
+            <div>
+              <span class="project-badge">Calentamiento y Proyecto 1</span>
+              <h3>Calentamiento y Proyecto 1 · PSoC 5LP</h3>
+              <p>Exploración inicial y comparador analógico en PSoC 5LP, pruebas con histéresis y póster técnico.</p>
+            </div>
+            <button type="button" class="btn btn-primary">Abrir detalle</button>
+          </article>
+
+          <article class="project-card" onclick="abrirModal('p2_3')">
+            <div>
+              <span class="project-badge">Proyectos 2 y 3</span>
+              <h3>Proyectos 2 y 3 · Diagnóstico y Enfoque</h3>
+              <p>Salida de campo en aulas, Gates y definición del problema real sin uso de PSoC.</p>
+            </div>
+            <button type="button" class="btn btn-primary">Abrir detalle</button>
+          </article>
+
+          <article class="project-card" onclick="abrirModal('p4')">
+            <div>
+              <span class="project-badge">Proyecto 4</span>
+              <h3>Proyecto 4 · PMV con Fresado CNC</h3>
+              <p>Diseño en KiCad, mecanizado en fresadora CNC, soldadura, temporización y conmutación con relé.</p>
+            </div>
+            <button type="button" class="btn btn-primary">Abrir detalle</button>
+          </article>
+
+          <article class="project-card" onclick="abrirModal('p5_6')">
+            <div>
+              <span class="project-badge">Proyectos 5 y 6</span>
+              <h3>Proyectos 5 y 6 · Transición a PCBA y Cierre</h3>
+              <p>Evolución hacia PCBA con 2200uF y 4.7M en KiCad, reglas de diseño y cierre del curso.</p>
+            </div>
+            <button type="button" class="btn btn-primary">Abrir detalle</button>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- VENTANA MODAL -->
+  <div id="modalProyecto" class="modal" onclick="cerrarFondo(event)">
+    <div class="modal-content">
+      <button type="button" class="modal-close" onclick="cerrarModal()" aria-label="Cerrar">✕</button>
+      <span id="mBadge" class="project-badge"></span>
+      <h3 id="mTitulo"></h3>
+
+      <div class="modal-section">
+        <h4>Objetivo y actividades</h4>
+        <p id="mObjetivo"></p>
+      </div>
+
+      <div class="modal-section">
+        <h4>Proceso, fallas resueltas y dinámica del equipo</h4>
+        <p id="mProceso"></p>
+      </div>
+
+      <div class="modal-section">
+        <h4>Resultados y estado</h4>
+        <p id="mResultados"></p>
+      </div>
+
+      <div class="modal-actions">
+        <a id="mLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+          Abrir archivo del proyecto
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">Portafolio de Electrónica 3 · Isabela Muñoz · Universidad Surcolombiana</div>
+  </footer>
+
+  <script>
+    const proyectos = {
+      p1: {
+        badge: "Calentamiento y Proyecto 1",
+        titulo: "Calentamiento y Proyecto 1 — Comparador en PSoC 5LP y Póster",
+        objetivo: "Instalar el entorno de desarrollo, explorar la tarjeta PSoC 5LP (CY8CKIT-059), configurar y caracterizar el comparador analógico con distintas ventanas de histéresis y presentar los resultados en el póster técnico.",
+        proceso: "Configuramos bloques internos en PSoC Creator, usamos generación de señal y probamos la histéresis en pasos con el osciloscopio RIGOL. Resolvimos fallos iniciales de reconocimiento USB reinstalando controladores y verificando el chip target, evitamos el recorte negativo ajustando nivel/frecuencia y eliminamos el chattering habilitando histéresis. Tras la revisión por pares, reforzamos la explicación técnica y matemática.",
+        resultados: "Esta fue la etapa en la que trabajamos con la PSoC 5LP: logramos caracterizar el comparador con histéresis, evitar conmutaciones falsas por ruido y consolidar el documento y el póster correspondientes.",
+        enlace: "https://ejemplo.com/calentamiento-y-proyecto-1"
+      },
+      p2_3: {
+        badge: "Proyectos 2 y 3",
+        titulo: "Proyectos 2 y 3 — Diagnóstico en Aulas y Definición del Problema",
+        objetivo: "Identificar y validar una problemática real de gestión energética en las aulas mediante observación directa, entrevistas y medición de tiempos muertos, dejando atrás el uso de la PSoC.",
+        proceso: "Realizamos entrevistas a encargados de llaves, vigilancia y docentes, junto con recorridos de observación en salones, detectando aires acondicionados encendidos en aulas vacías por falta de acceso al control remoto por parte de los docentes y dudas sobre la ocupación entre bloques. Tras la retroalimentación docente, ajustamos el enfoque para validar primero el problema y los tiempos muertos antes de plantear el circuito.",
+        resultados: "Consolidamos la evidencia de campo y la medición de tiempos muertos en aulas, estableciendo los requerimientos técnicos para diseñar una solución autónoma sin depender de PSoC.",
+        enlace: "https://ejemplo.com/proyectos-2-y-3"
+      },
+      p4: {
+        badge: "Proyecto 4",
+        titulo: "Proyecto 4 — PMV con Fresado CNC y Temporización",
+        objetivo: "Desarrollar y validar un Producto Mínimo Viable (PMV) en PCB mecanizada por fresadora CNC para gestionar el retardo y la conmutación de carga.",
+        proceso: "Superamos las limitaciones de herramientas iniciales, diseñamos esquemático y PCB para fresado CNC de una cara en KiCad, operamos la fresadora, realizamos la soldadura de componentes y probamos el circuito en banco. Acompañamos los ajustes de temporización, etapa driver con transistor, protección y relé, documentando cada etapa.",
+        resultados: "Obtuvimos el prototipo físico del PMV fabricado en CNC, con validación de la etapa de temporización, conmutación del relé y registro del proceso y las pruebas realizadas.",
+        enlace: "https://ejemplo.com/proyecto-4-pmv-cnc"
+      },
+      p5_6: {
+        badge: "Proyectos 5 y 6",
+        titulo: "Proyectos 5 y 6 — Transición a PCBA y Cierre del Curso",
+        objetivo: "Evolucionar el diseño hacia fabricación y ensamblaje industrial (PCBA) cumpliendo reglas de diseño, presupuesto y verificación, e integrar el cierre del Proyecto 6.",
+        proceso: "A partir de las lecciones del PMV y de la revisión del diseño, adaptamos la arquitectura hacia una placa orientada a PCBA con temporizador, capacitor de 2200uF, potenciómetro de 4.7M y etapa de salida hacia el transistor y relé en KiCad. Estamos cerrando las verificaciones eléctricas/físicas, la selección de componentes, los archivos de fabricación y el presupuesto antes de la entrega final.",
+        resultados: "Diseño en KiCad en depuración final para avanzar a verificación PCBA, cotización y consolidación de los archivos y evidencias del Proyecto 5 y el Proyecto 6.",
+        enlace: "https://ejemplo.com/proyectos-5-y-6-pcba"
+      }
+    };
+
+    function abrirModal(id) {
+      const data = proyectos[id];
+      if (!data) return;
+      document.getElementById("mBadge").textContent = data.badge;
+      document.getElementById("mTitulo").textContent = data.titulo;
+      document.getElementById("mObjetivo").textContent = data.objetivo;
+      document.getElementById("mProceso").textContent = data.proceso;
+      document.getElementById("mResultados").textContent = data.resultados;
+      document.getElementById("mLink").href = data.enlace;
+      document.getElementById("modalProyecto").classList.add("open");
+    }
+
+    function cerrarModal() {
+      document.getElementById("modalProyecto").classList.remove("open");
+    }
+
+    function cerrarFondo(e) {
+      if (e.target.id === "modalProyecto") cerrarModal();
+    }
+  </script>
+</body>
+</html>
