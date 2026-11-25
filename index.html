@@ -148,6 +148,15 @@
       background: var(--primary-deep);
     }
 
+    .btn-secondary {
+      background: var(--primary-soft);
+      color: var(--primary-deep);
+    }
+
+    .btn-secondary:hover {
+      background: #e2d5fc;
+    }
+
     section {
       padding: 56px 0;
     }
@@ -520,7 +529,7 @@
             <div>
               <span class="project-badge">Calentamiento y Proyecto 1</span>
               <h3>Calentamiento y Proyecto 1 · PSoC 5LP</h3>
-              <p>Exploración inicial y comparador analógico en PSoC 5LP, pruebas con histéresis y póster técnico.</p>
+              <p>Exploración inicial y comparador analógico en PSoC 5LP, pruebas con histéresis y documento técnico.</p>
             </div>
             <button type="button" class="btn btn-primary">Abrir detalle</button>
           </article>
@@ -528,8 +537,8 @@
           <article class="project-card" onclick="abrirModal('p2_3')">
             <div>
               <span class="project-badge">Proyectos 2 y 3</span>
-              <h3>Proyectos 2 y 3 · Diagnóstico y Enfoque</h3>
-              <p>Salida de campo en aulas, Gates y definición del problema real sin uso de PSoC.</p>
+              <h3>Proyectos 2 y 3 · Diagnóstico y Póster</h3>
+              <p>Salida de campo en aulas, documento L3_P2_.pdf y póster Poster_P3.jpeg sin uso de PSoC.</p>
             </div>
             <button type="button" class="btn btn-primary">Abrir detalle</button>
           </article>
@@ -582,6 +591,9 @@
         <a id="mLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
           Abrir archivo del proyecto
         </a>
+        <a id="mLinkExtra" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="display: none;">
+          Ver póster (P3)
+        </a>
       </div>
     </div>
   </div>
@@ -594,19 +606,21 @@
     const proyectos = {
       p1: {
         badge: "Calentamiento y Proyecto 1",
-        titulo: "Calentamiento y Proyecto 1 — Comparador en PSoC 5LP y Póster",
-        objetivo: "Instalar el entorno de desarrollo, explorar la tarjeta PSoC 5LP (CY8CKIT-059), configurar y caracterizar el comparador analógico con distintas ventanas de histéresis y presentar los resultados en el póster técnico.",
-        proceso: "Configuramos bloques internos en PSoC Creator, usamos generación de señal y probamos la histéresis en pasos con el osciloscopio RIGOL. Resolvimos fallos iniciales de reconocimiento USB reinstalando controladores y verificando el chip target, evitamos el recorte negativo ajustando nivel/frecuencia y eliminamos el chattering habilitando histéresis. Tras la revisión por pares, reforzamos la explicación técnica y matemática.",
-        resultados: "Esta fue la etapa en la que trabajamos con la PSoC 5LP: logramos caracterizar el comparador con histéresis, evitar conmutaciones falsas por ruido y consolidar el documento y el póster correspondientes.",
-        enlace: "https://ejemplo.com/calentamiento-y-proyecto-1"
+        titulo: "Calentamiento y Proyecto 1 — Comparador en PSoC 5LP",
+        objetivo: "Instalar el entorno de desarrollo, explorar la tarjeta PSoC 5LP (CY8CKIT-059), configurar y caracterizar el comparador analógico con distintas ventanas de histéresis.",
+        proceso: "Configuramos bloques internos en PSoC Creator, usamos generación de señal y probamos la histéresis en pasos con el osciloscopio RIGOL. Resolvimos fallos iniciales de reconocimiento USB reinstalando controladores y verificando el chip target, evitamos el recorte negativo ajustando nivel/frecuencia y eliminamos el chattering habilitando histéresis.",
+        resultados: "Esta fue la etapa en la que trabajamos con la PSoC 5LP: logramos caracterizar el comparador con histéresis, evitar conmutaciones falsas por ruido y consolidar el documento DOC-20260902-WA0042_copia.pdf.",
+        enlace: "DOC-20260902-WA0042_copia.pdf"
       },
       p2_3: {
         badge: "Proyectos 2 y 3",
-        titulo: "Proyectos 2 y 3 — Diagnóstico en Aulas y Definición del Problema",
+        titulo: "Proyectos 2 y 3 — Diagnóstico en Aulas y Póster",
         objetivo: "Identificar y validar una problemática real de gestión energética en las aulas mediante observación directa, entrevistas y medición de tiempos muertos, dejando atrás el uso de la PSoC.",
-        proceso: "Realizamos entrevistas a encargados de llaves, vigilancia y docentes, junto con recorridos de observación en salones, detectando aires acondicionados encendidos en aulas vacías por falta de acceso al control remoto por parte de los docentes y dudas sobre la ocupación entre bloques. Tras la retroalimentación docente, ajustamos el enfoque para validar primero el problema y los tiempos muertos antes de plantear el circuito.",
-        resultados: "Consolidamos la evidencia de campo y la medición de tiempos muertos en aulas, estableciendo los requerimientos técnicos para diseñar una solución autónoma sin depender de PSoC.",
-        enlace: "https://ejemplo.com/proyectos-2-y-3"
+        proceso: "Realizamos entrevistas a encargados de llaves, vigilancia y docentes, junto con recorridos de observación en salones, detectando aires acondicionados encendidos en aulas vacías por falta de acceso al control remoto por parte de los docentes y dudas sobre la ocupación entre bloques. Integramos el avance en L3_P2_.pdf y el póster Poster_P3.jpeg.",
+        resultados: "Consolidamos la evidencia de campo, el documento L3_P2_.pdf y el póster Poster_P3.jpeg para definir los requerimientos técnicos sin depender de PSoC.",
+        enlace: "L3_P2_.pdf",
+        enlaceExtra: "Poster_P3.jpeg",
+        textoExtra: "Abrir Poster_P3.jpeg"
       },
       p4: {
         badge: "Proyecto 4",
@@ -614,7 +628,7 @@
         objetivo: "Desarrollar y validar un Producto Mínimo Viable (PMV) en PCB mecanizada por fresadora CNC para gestionar el retardo y la conmutación de carga.",
         proceso: "Superamos las limitaciones de herramientas iniciales, diseñamos esquemático y PCB para fresado CNC de una cara en KiCad, operamos la fresadora, realizamos la soldadura de componentes y probamos el circuito en banco. Acompañamos los ajustes de temporización, etapa driver con transistor, protección y relé, documentando cada etapa.",
         resultados: "Obtuvimos el prototipo físico del PMV fabricado en CNC, con validación de la etapa de temporización, conmutación del relé y registro del proceso y las pruebas realizadas.",
-        enlace: "https://ejemplo.com/proyecto-4-pmv-cnc"
+        enlace: "PEGA_AQUI_EL_NOMBRE_DE_TU_ARCHIVO_DE_PROYECTO_4"
       },
       p5_6: {
         badge: "Proyectos 5 y 6",
@@ -635,6 +649,16 @@
       document.getElementById("mProceso").textContent = data.proceso;
       document.getElementById("mResultados").textContent = data.resultados;
       document.getElementById("mLink").href = data.enlace;
+
+      const extraBtn = document.getElementById("mLinkExtra");
+      if (data.enlaceExtra) {
+        extraBtn.href = data.enlaceExtra;
+        extraBtn.textContent = data.textoExtra || "Ver archivo adicional";
+        extraBtn.style.display = "inline-block";
+      } else {
+        extraBtn.style.display = "none";
+      }
+
       document.getElementById("modalProyecto").classList.add("open");
     }
 
